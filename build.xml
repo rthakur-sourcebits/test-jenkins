@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+
+<project name="dharma" >
+	<echo message="Running Targets" />
+	
+    <target name="build" depends="compress_css" />
+    <property name="search_path" location="${basedir}/application/classes/controller/" />
+    <target name="tools-parallel" description="Run tools in parallel">
+	  <parallel threadCount="2">
+	   <antcall target="phploc"/>
+	  </parallel>
+	</target>
+ <!--- generate the xml using  loc phploc,phpcpd,phpcs,phpmd,phpcb, -->
+	<target name="phploc" description="Measure project size using PHPLOC">
+	  <exec executable="phploc">
+	   <arg value="--log-csv" />
+	   <arg value="${basedir}/report/phploc.csv" />
+	   <arg path="${search_path}" />
+	  </exec>
+	 </target>
+ <!--- generate the log/xml using copy paste detector -->
+	<target name="phpcpd">
+		<exec executable="phpcpd">
+		    <arg value="--log-pmd"/>
+		    <arg value="${basedir}/report/pmd-cpd.xml"/>
+		    <arg path="${search_path}" />
+		</exec>
+	</target>
+<!--- generate the log/xml using  phpcs -->
+    <target name="phpcs"
+            description="Generate checkstyle.xml using PHP_CodeSniffer">
+        <exec executable="phpcs">
+            <arg value="--report=checkstyle" />
+            <arg value="--report-file=${basedir}/report/code_sniffer.xml" />           
+            <arg path="${search_path}" />
+        </exec>
+    </target>
+	 <!--- generate the log/xml using  phpmd -->
+    <target name="phpmd"
+            description="Perform project mess detection using PHPMD and print human readable output. ">
+        <exec executable="phpmd" output="${basedir}/report/mess_detector.xml">
+            <arg path="${search_path}" />
+            <arg value="xml" />
+            <arg value="${basedir}/build/phpmd.xml" />
+        </exec>
+    </target>
+<!--- generate the report using  code browser -->
+    <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
+        <exec executable="phpcb">
+            <arg line="--log ${basedir}/report/
+                   --output ${basedir}/report/codebrowser
+                   --source ${search_path}" />
+        </exec>
+    </target>
+    <property name="assets_dir" location="${basedir}/build/css" />
+    <property name="destination" location="${basedir}/build/css" />
+    <property name="compressor"  location='${basedir}/yuicompressor-2.4.2.jar'/>
+
+ <target name="concat_css">
+        <concat destfile="${destination}/style.css">
+            <filelist id="files" dir="css_dir">
+                <file name="${assets_dir}/style.css" />
+            </filelist>
+        </concat>
+    </target>
+
+    <target name="compress">        
+        <java jar="${compressor}" fork="true">
+ <arg value="--type=css" />
+            <arg value="${file}" />
+	  
+            <arg value="-o" />
+            <arg value="${file}" />
+ <arg value="--type"/>
+		<arg value="css"/>
+        </java>
+
+        <echo>${file}</echo>
+    </target>
+    
+    
+    <target name="compress_css2">
+        <antcall target="compress">
+            <param name="file" value="${assets_dir}" />
+        </antcall>
+    </target>
+
+<target name="compress_css">
+    <apply executable="java" parallel="false" dest="${assets_dir}" taskname="minify-js" force="true">
+        <fileset dir="${assets_dir}" includes="*.css">
+            <exclude name="*.min.css" />
+        </fileset>
+ 	<arg line="-jar"></arg>
+        <arg path="${compressor}"></arg>
+        <arg value="--type=css" />
+        <srcfile />
+        <arg value="-o" />
+        <targetfile />
+       <mapper type="glob" from="*.css" to="*-min.css"></mapper>
+    </apply>
+</target>
+
+</project>
