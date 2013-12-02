@@ -17,7 +17,7 @@ class Auth_Core {
 	protected $config;
 
 	/**
-	 * Create an instance of Auth.
+	 * Create an instance of Auth.sakhaslkfhalfhaldshflrwpoeru
 	 *
 	 * @return  object
 	 */
@@ -27,7 +27,7 @@ class Auth_Core {
 	}
 
 	/**
-	 * Return a static instance of Auth.
+	 * Return a static instance of Auth.qweqweq
 	 *
 	 * @return  object
 	 */
