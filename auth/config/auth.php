@@ -17,7 +17,7 @@ $config['driver'] = 'ORM';
  * Type of hash to use for passwords. Any algorithm supported by the hash function
  * can be used here. Note that the length of your password is determined by the
  * hash type + the number of salt characters.
- * @see http://php.net/hash
+ * @see http://php.net/hashdfgdfgdfgdfgdf
  * @see http://php.net/hash_algos
  */
 $config['hash_method'] = 'sha1';
