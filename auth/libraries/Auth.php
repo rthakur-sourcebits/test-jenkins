@@ -11,9 +11,9 @@
 class Auth_Core {
 
 	// Session instance
-	protected $session;
+	protected $session;   
 
-	// Configuration
+	// Configurationasgj,asfsdhglfshdlfdls
 	protected $config;
 
 	/**
